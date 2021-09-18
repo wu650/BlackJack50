@@ -1,2 +1,2 @@
-# BlackJack50
-Single player blackjack implemented using Java
+# blackjack-sp
+Single player blackjack game implemented using Java
