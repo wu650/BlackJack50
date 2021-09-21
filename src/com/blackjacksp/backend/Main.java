@@ -1,8 +1,7 @@
-package com.blackjacksp.core;
+package com.blackjacksp.backend;
 
 public class Main {
 
     public static void main(String[] args) {
-	    System.out.println("hello, world");
+        }
     }
-}
