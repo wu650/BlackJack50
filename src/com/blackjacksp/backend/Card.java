@@ -1,15 +1,17 @@
 package com.blackjacksp.backend;
 
 public class Card {
-    private String suit;
     private String value;
+    private String suit;
     private boolean isHidden;
 
-    public Card(String suit, String value, boolean isHidden) {
-        this.suit = suit;
+    public Card(String value, String suit, boolean isHidden) {
         this.value = value;
+        this.suit = suit;
         this.isHidden = isHidden;
     }
+
+    public Card() {}
 
     public String getSuit() {
         return suit;
