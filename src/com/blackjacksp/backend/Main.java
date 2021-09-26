@@ -12,7 +12,7 @@ public class Main {
         decktest.shuffleDeck();
 
         for (Card card : CardPool.getDeck()) {
-            System.out.println(card.getValue() + " of " + card.getSuit() + "s");
+            System.out.println(card.getTitle() + " of " + card.getSuit() + "s");
         }
 
         Player user = new Player("willis", false);
@@ -21,9 +21,10 @@ public class Main {
         System.out.println("CARD IS DEALT");
 
         for (Card card : CardPool.getDeck()) {
-            System.out.println(card.getValue() + " of " + card.getSuit() + "s");
+            System.out.println(card.getTitle() + " of " + card.getSuit() + "s");
         }
 
-        System.out.println("The user holds " + user.getHand().get(0).getValue() + " of " + user.getHand().get(0).getSuit());
+        System.out.println("The user holds the " + user.getHand().get(0).getTitle() + " of " + user.getHand().get(0).getSuit() + "s");
+        System.out.println("Hand score: " + user.handValue());
     }
 }

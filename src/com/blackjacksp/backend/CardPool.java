@@ -26,7 +26,7 @@ public class CardPool {
         for (int i = 0; i < numDecks; i++) {
             for (CARDVALS cardVal : CARDVALS.values()) {
                 for (SUITS suit : SUITS.values()) {
-                    deck.add(new Card(cardVal.getDisplayedName(), suit.getSuit(), true));
+                    deck.add(new Card(cardVal, suit.getSuit(), true));
                 }
             }
         }
@@ -54,4 +54,5 @@ public class CardPool {
         player.addCard(dealtCard);
     }
 }
+
 

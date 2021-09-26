@@ -1,11 +1,11 @@
 package com.blackjacksp.backend;
 
 public class Card {
-    private String value;
+    private CARDVALS value;
     private String suit;
     private boolean isHidden;
 
-    public Card(String value, String suit, boolean isHidden) {
+    public Card(CARDVALS value, String suit, boolean isHidden) {
         this.value = value;
         this.suit = suit;
         this.isHidden = isHidden;
@@ -17,8 +17,10 @@ public class Card {
         return suit;
     }
 
-    public String getValue() {
-        return value;
+    public String getTitle() {return value.getDisplayedName();}
+
+    public int getValue() {
+        return value.getVal();
     }
 
     public boolean isHidden() {
@@ -29,7 +31,7 @@ public class Card {
         this.suit = newSuit;
     }
 
-    public void setValue(String newValue) {
+    public void setValue(CARDVALS newValue) {
         this.value = newValue;
     }
 
