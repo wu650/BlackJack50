@@ -16,6 +16,17 @@ public class Player {
         this.hand = new ArrayList<Card>();
     }
 
+    // Used to aid in the scoring of hands with aces
+    private int countAces() {
+        int aceCounter = 0;
+        for (Card card : hand) {
+            if (card.getTitle().equals("Ace")) {
+                aceCounter++;
+            }
+        }
+        return aceCounter;
+    }
+
     public String getPlayerName() {
         return playerName;
     }
@@ -24,12 +35,12 @@ public class Player {
         return isDealer;
     }
 
-    public List<Card> getHand() {
-        return hand;
+    public boolean isSticking() {
+        return isSticking;
     }
 
-    public void setPlayerName(String playerName) {
-        this.playerName = playerName;
+    public List<Card> getHand() {
+        return hand;
     }
 
     public void setSticking(boolean isSticking) { this.isSticking = isSticking; }
@@ -38,12 +49,24 @@ public class Player {
         hand.add(drawnCard);
     }
 
+
+    // Returns a hand value with the optimal usage of aces (if applicable)
     public int handValue() {
         int handTotal = 0;
+        int aceAdjustments = 0;
         for (Card card : hand)
             handTotal += card.getValue();
+
+        // Adjusts hand total to score aces as 1 instead of 11 where appropriate
+        while (handTotal > 21) {
+            if (countAces() > aceAdjustments) {
+                handTotal -= 10;
+                aceAdjustments++;
+            }
+        }
         return handTotal;
     }
+
 
     public void dealerLogic(CardPool cardPool) throws DealerException {
         // Ensures that dealer logic is only run on a dealer
