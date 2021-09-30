@@ -23,8 +23,19 @@ public class GamePlay {
         handTally.put("Tied", 0);
     }
 
-    public void setupGame() {
+    // Launches the game (combines gameplay functions to create gameflow)
+    public void enterGameFlow() {
         Scanner scan = new Scanner(System.in);
+        setupGame(scan);
+        for (int i = 0; i < numHands; i++) {
+            playHand(scan);
+        }
+        announceFinalTally();
+        scan.close();
+        return;
+    }
+
+    public void setupGame(Scanner scan) {
 
         // Get user input for desired number of decks
         System.out.println("How many decks will you use?");
@@ -37,6 +48,7 @@ public class GamePlay {
         // Get user input for desired number of hands
         System.out.println("How many hands will you play?");
         int numHands = scan.nextInt();
+        scan.nextLine();
         this.numHands = numHands;
 
         // Add dealer to players list (will always be index 0)
@@ -50,28 +62,60 @@ public class GamePlay {
         playerList.add(new Player(playerName, false));
 
         initializeHandTally();
-
-        scan.close();
     }
 
-    public void playHand() {
-        // TODO
+    // All the steps in a hand from beginning to end
+    public void playHand(Scanner scan) {
+        dealStartingHands();
+        // Initial display of both players starting hands
+        for (Player player : playerList) {
+            player.printHand();
+        }
+        if (naturalBlackjack()) {
+            // Reveals the dealers facedown card in the event of a natural
+            playerList.get(0).revealHand();
+            playerList.get(0).printHand();
+            System.out.println("Round over. Advancing to next hand.");
+        }
+
+        // Round progresses if there is no natural
+        else {
+
+            // User's turn
+            hitOrStickCycle(playerList.get(1), scan);
+            // Check if the user went over 21
+            if (playerList.get(1).handValue() > 21) {
+                handTally.put("Lost", handTally.get("Lost") + 1);
+                playerList.get(0).revealHand();
+                playerList.get(0).printHand();
+                return;
+            }
+
+            // Dealer's turn
+            playerList.get(0).revealHand();
+            playerList.get(0).printHand();
+            try {
+                playerList.get(0).dealerLogic(cardPool);
+            }
+            catch (Exception DealerException) {
+                System.out.println("Dealer was not passed in properly");
+            }
+            scoreHand();
+            emptyHands();
+        }
     }
 
     // Will disperse the initial two cards
     public void dealStartingHands() {
-        for (Player player : playerList) {
-
-            // Always deals to non-dealers first
-            if (!player.isDealer()) {
-                for (int i = 0; i < 2; i++) {
-                    cardPool.dealCard(player);
-                }
+        // Always deals to non-dealers first
+        for (int i = 1; i >= 0; i--) {
+            for (int j = 0; j < 2; j++){
+                cardPool.dealCard(playerList.get(i));
             }
-            else if (player.isDealer()) {
-                for (int i = 0; i < 2; i++) {
-                    cardPool.dealCard(player);
-                }
+
+            // Dealer starts with second card hidden
+            if (playerList.get(i).isDealer()) {
+                playerList.get(i).getHand().get(1).setHidden(true);
             }
         }
     }
@@ -80,14 +124,17 @@ public class GamePlay {
     public boolean naturalBlackjack() {
         if (playerList.get(0).handValue() == 21 && playerList.get(1).handValue() == 21) {
             handTally.put("Tied", handTally.get("Tied") + 1);
+            System.out.println("Both players have blackjack! This hand is a tie.");
             return true;
         }
         else if (playerList.get(0).handValue() == 21) {
             handTally.put("Lost", handTally.get("Lost") + 1);
+            System.out.println("The dealer has blackjack. You lose this hand.");
             return true;
         }
         else if (playerList.get(1).handValue() == 21) {
             handTally.put("Won", handTally.get("Won") + 1);
+            System.out.println("You have blackjack! You win this hand.");
             return true;
         }
         else {
@@ -96,10 +143,9 @@ public class GamePlay {
     }
 
     // Main gameplay for the user each round (hit or stick)
-    public void hitOrStickCycle(Player player) {
-        Scanner scan = new Scanner(System.in);
+    public void hitOrStickCycle(Player player, Scanner scan) {
         while (!player.isSticking()) {
-            System.out.printf("Would you like to hit or stick?\n");
+            System.out.println("Would you like to hit or stick?");
             String choice = scan.nextLine();
             if (choice.trim().equalsIgnoreCase("Stick") || choice.trim().equalsIgnoreCase("S")) {
                 player.setSticking(true);
@@ -120,9 +166,9 @@ public class GamePlay {
                     break;
                 }
                 else {
-                    System.out.printf("Your hand now consists of:\n");
+                    System.out.println("Your hand now consists of:");
                     for (Card card : player.getHand()) {
-                        System.out.printf("%s of %ss", card.getTitle(), card.getSuit());
+                        System.out.printf("%s of %ss\n", card.getTitle(), card.getSuit());
                     }
                 }
             }
@@ -131,5 +177,47 @@ public class GamePlay {
                 System.out.println("Please enter Stick or Hit");
             }
         }
+    }
+
+    public void scoreHand() {
+        int dealerScore = playerList.get(0).handValue();
+        int playerScore = playerList.get(1).handValue();
+        // Check if dealer busted
+        if (dealerScore > 21) {
+            System.out.println("Dealer busted, round over.");
+            handTally.put("Won", handTally.get("Won") + 1);
+        }
+        else if (dealerScore > playerScore) {
+            System.out.printf("Dealer scored %d\n", dealerScore);
+            System.out.printf("You scored %d\n", playerScore);
+            System.out.println("The dealer wins. Moving to next round.\n");
+            handTally.put("Lost", handTally.get("Lost") + 1);
+        }
+        else if (dealerScore == playerScore) {
+            System.out.printf("Both players scored %d\n", dealerScore);
+            System.out.println("Round results in a tie. Moving to next round.");
+            handTally.put("Tied", handTally.get("Tied") + 1);
+        }
+        else {
+            System.out.printf("Dealer scored %d\n", dealerScore);
+            System.out.printf("You scored %d\n", playerScore);
+            System.out.println("You win! Moving to next round.");
+            handTally.put("Won", handTally.get("Won") + 1);
+        }
+    }
+
+    // Sends hands to discard pile at the end of the round
+    public void emptyHands() {
+        for (Player player: playerList) {
+            // Append player's entire hand to the discard pile
+            CardPool.getDiscardPile().addAll(player.getHand());
+            // Clear hand for next round
+            player.clearHand();
+        }
+    }
+
+    public void announceFinalTally() {
+        System.out.printf("In %d hands you won %d, lost %d, and tied %d.\nThank you for playing",
+                numHands, handTally.get("Won"), handTally.get("Lost"), handTally.get("Tied"));
     }
 }

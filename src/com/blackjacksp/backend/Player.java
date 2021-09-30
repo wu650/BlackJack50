@@ -43,12 +43,35 @@ public class Player {
         return hand;
     }
 
+    public void clearHand() { hand.clear(); }
+
     public void setSticking(boolean isSticking) { this.isSticking = isSticking; }
 
     public void addCard(Card drawnCard) {
         hand.add(drawnCard);
     }
 
+    // Prints a list of cards in the player's hand
+    public void printHand() {
+        System.out.printf("%s currently holds:\n", getPlayerName());
+        for (Card card : hand) {
+            // Ensures that no hidden cards are revealed prematurely
+            if (card.isHidden()) {
+                System.out.println("Unknown (facedown) card");
+            }
+            else {
+                System.out.printf("The %s of %ss\n", card.getTitle(), card.getSuit());
+            }
+        }
+    }
+
+    public void revealHand() {
+        for (Card card : hand) {
+            if (card.isHidden()) {
+                card.setHidden(false);
+            }
+        }
+    }
 
     // Returns a hand value with the optimal usage of aces (if applicable)
     public int handValue() {
@@ -67,7 +90,6 @@ public class Player {
         return handTotal;
     }
 
-
     public void dealerLogic(CardPool cardPool) throws DealerException {
         // Ensures that dealer logic is only run on a dealer
         if(!isDealer) {
@@ -81,6 +103,8 @@ public class Player {
             }
             else {
                 cardPool.dealCard(this);
+                System.out.printf("Dealer drew a(n) %s of %ss.\n", hand.get(hand.size() - 1).getTitle(), hand.get(hand.size() - 1).getTitle());
+                printHand();
             }
         }
     }
