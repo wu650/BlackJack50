@@ -49,9 +49,9 @@ public class CardPool {
     }
 
     // Pass top card of the deck to the player requesting a 'hit'
-    public void dealCard(Player player) {
+    public Card dealCard() {
         Card dealtCard = deck.remove(0);
-        player.addCard(dealtCard);
+        return dealtCard;
     }
 }
 

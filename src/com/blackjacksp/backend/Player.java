@@ -86,6 +86,9 @@ public class Player {
                 handTotal -= 10;
                 aceAdjustments++;
             }
+            else {
+                return handTotal;
+            }
         }
         return handTotal;
     }
@@ -102,8 +105,8 @@ public class Player {
                 setSticking(true);
             }
             else {
-                cardPool.dealCard(this);
-                System.out.printf("Dealer drew a(n) %s of %ss.\n", hand.get(hand.size() - 1).getTitle(), hand.get(hand.size() - 1).getTitle());
+                addCard(cardPool.dealCard());
+                System.out.printf("Dealer drew a(n) %s of %ss.\n", hand.get(hand.size() - 1).getTitle(), hand.get(hand.size() - 1).getSuit());
                 printHand();
             }
         }

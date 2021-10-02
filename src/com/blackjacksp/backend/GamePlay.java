@@ -66,6 +66,8 @@ public class GamePlay {
 
     // All the steps in a hand from beginning to end
     public void playHand(Scanner scan) {
+        System.out.print("\n");
+        System.out.println("Start of new hand.");
         dealStartingHands();
         // Initial display of both players starting hands
         for (Player player : playerList) {
@@ -83,6 +85,7 @@ public class GamePlay {
 
             // User's turn
             hitOrStickCycle(playerList.get(1), scan);
+
             // Check if the user went over 21
             if (playerList.get(1).handValue() > 21) {
                 handTally.put("Lost", handTally.get("Lost") + 1);
@@ -101,8 +104,11 @@ public class GamePlay {
                 System.out.println("Dealer was not passed in properly");
             }
             scoreHand();
-            emptyHands();
+            for (Player player : playerList) {
+                player.setSticking(false);
+            }
         }
+        emptyHands();
     }
 
     // Will disperse the initial two cards
@@ -110,7 +116,7 @@ public class GamePlay {
         // Always deals to non-dealers first
         for (int i = 1; i >= 0; i--) {
             for (int j = 0; j < 2; j++){
-                cardPool.dealCard(playerList.get(i));
+                playerList.get(i).addCard(cardPool.dealCard());
             }
 
             // Dealer starts with second card hidden
@@ -151,7 +157,7 @@ public class GamePlay {
                 player.setSticking(true);
             }
             else if (choice.trim().equalsIgnoreCase("Hit") || choice.trim().equalsIgnoreCase("H")) {
-                cardPool.dealCard(player);
+                player.addCard(cardPool.dealCard());
 
                 // Tells the player what card they were dealt
                 System.out.printf("You were dealt a %s of %ss\n", player.getHand().get(player.getHand().size() - 1).getTitle(), player.getHand().get(player.getHand().size() - 1).getSuit());
@@ -217,7 +223,7 @@ public class GamePlay {
     }
 
     public void announceFinalTally() {
-        System.out.printf("In %d hands you won %d, lost %d, and tied %d.\nThank you for playing",
+        System.out.printf("In %d hands you won %d, lost %d, and tied %d.\nThank you for playing.",
                 numHands, handTally.get("Won"), handTally.get("Lost"), handTally.get("Tied"));
     }
 }
