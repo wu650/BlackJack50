@@ -91,6 +91,7 @@ public class GamePlay {
                 handTally.put("Lost", handTally.get("Lost") + 1);
                 playerList.get(0).revealHand();
                 playerList.get(0).printHand();
+                emptyHands();
                 return;
             }
 
