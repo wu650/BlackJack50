@@ -6,13 +6,11 @@ import java.util.List;
 public class Player {
     private String playerName;
     private boolean isDealer;
-    private boolean isSticking;
     private List<Card> hand;
 
     public Player(String playerName, boolean isDealer) {
         this.playerName = playerName;
         this.isDealer = isDealer;
-        this.isSticking = false;
         this.hand = new ArrayList<Card>();
     }
 
@@ -32,11 +30,7 @@ public class Player {
     }
 
     public boolean isDealer() {
-        return isDealer;
-    }
-
-    public boolean isSticking() {
-        return isSticking;
+        return this.isDealer;
     }
 
     public List<Card> getHand() {
@@ -44,8 +38,6 @@ public class Player {
     }
 
     public void clearHand() { hand.clear(); }
-
-    public void setSticking(boolean isSticking) { this.isSticking = isSticking; }
 
     public void addCard(Card drawnCard) {
         hand.add(drawnCard);
@@ -93,22 +85,4 @@ public class Player {
         return handTotal;
     }
 
-    public void dealerLogic(CardPool cardPool) throws DealerException {
-        // Ensures that dealer logic is only run on a dealer
-        if(!isDealer) {
-            throw new DealerException("\n" + "Attempting to use dealer logic on a non-dealer");
-        }
-
-        // Dealers will stick if total >= 17 and continue taking cards until that point
-        while(!isSticking) {
-            if(handValue() >= 17) {
-                setSticking(true);
-            }
-            else {
-                addCard(cardPool.dealCard());
-                System.out.printf("Dealer drew a(n) %s of %ss.\n", hand.get(hand.size() - 1).getTitle(), hand.get(hand.size() - 1).getSuit());
-                printHand();
-            }
-        }
-    }
 }

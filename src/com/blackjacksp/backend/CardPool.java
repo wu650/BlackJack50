@@ -13,11 +13,11 @@ public class CardPool {
         this.discardPile = new ArrayList<Card>();
     }
 
-    public static List<Card> getDeck() {
+    public List<Card> getDeck() {
         return deck;
     }
 
-    public static List<Card> getDiscardPile() {
+    public List<Card> getDiscardPile() {
         return discardPile;
     }
 
