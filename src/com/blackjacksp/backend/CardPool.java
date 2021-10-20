@@ -48,6 +48,13 @@ public class CardPool {
         }
     }
 
+    // Adds discard pile to deck and clears discard pile, then shuffles the deck
+    public void repopulateDeck() {
+        deck.addAll(discardPile);
+        discardPile.clear();
+        shuffleDeck();
+    }
+
     // Pass top card of the deck to the player requesting a 'hit'
     public Card dealCard() {
         Card dealtCard = deck.remove(0);

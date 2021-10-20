@@ -49,8 +49,9 @@ public class UI extends JFrame {
     JLabel dealerCards[];
     JLabel userNameLabel;
     JLabel dealerNameLabel;
-
     JLabel discardPile;
+    JLabel deckHolder;
+    ImageIcon deck;
 
     // Middle panel
     JPanel deckDisplay;
@@ -212,11 +213,6 @@ public class UI extends JFrame {
         deckSelect[3] = new JRadioButton("6");
         deckSelect[4] = new JRadioButton("8");
 
-        for (int i = 0; i < 5; i++) {
-            int num = Integer.parseInt(deckSelect[i].getText());
-            deckSelect[i].addActionListener(e -> game.gamePlay.setNumDecks(num));
-        }
-
         // Ensure only one radio button can be selected at a time by grouping
         // Add buttons to display after they are added to the group
         deckButtonGroup = new ButtonGroup();
@@ -225,7 +221,7 @@ public class UI extends JFrame {
             button.setOpaque(false);
             button.setFont(new Font("Times New Roman", Font.PLAIN, 34));
             button.setForeground(Color.WHITE);
-            button.addActionListener(e -> game.gamePlay.setNumHands(Integer.parseInt(button.getText())));
+            button.addActionListener(e -> game.gamePlay.setNumDecks(Integer.parseInt(button.getText())));
             setupSubPanels[0].add(button);
         }
 
@@ -236,18 +232,13 @@ public class UI extends JFrame {
         handSelect[3] = new JRadioButton("7");
         handSelect[4] = new JRadioButton("11");
 
-        for (int i = 0; i < 5; i++) {
-            int num = Integer.parseInt(handSelect[i].getText());
-            handSelect[i].addActionListener(e -> game.gamePlay.setNumHands(num));
-        }
-
         handButtonGroup = new ButtonGroup();
         for (JRadioButton button : handSelect) {
             handButtonGroup.add(button);
             button.setOpaque(false);
             button.setFont(new Font("Times New Roman", Font.PLAIN, 34));
             button.setForeground(Color.WHITE);
-            button.addActionListener(e -> game.gamePlay.setNumDecks(Integer.parseInt(button.getText())));
+            button.addActionListener(e -> game.gamePlay.setNumHands(Integer.parseInt(button.getText())));
             setupSubPanels[1].add(button);
         }
 
@@ -310,8 +301,8 @@ public class UI extends JFrame {
 
         // Add image for the deck to middle panel
         deckBack = icon.getScaledInstance(cardWidth/5, cardHeight/5,Image.SCALE_SMOOTH);
-        ImageIcon deck = new ImageIcon(deckBack);
-        JLabel deckHolder = new JLabel();
+        deck = new ImageIcon(deckBack);
+        deckHolder = new JLabel();
         deckHolder.setIcon(deck);
         deckHolder.setBounds(0, 0, cardWidth/5, cardHeight/5);
         deckDisplay.add(deckHolder);

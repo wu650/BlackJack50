@@ -86,6 +86,11 @@ public class Game {
     }
 
     public void openNewHand() {
+        if (gamePlay.getCardPool().getDeck().size() < 4) {
+            ui.messagePrompt.setText("Not enough cards. Reshuffling");
+            resetDeck();
+            return;
+        }
         gamePlay.dealStartingHands();
 
         // Display starting hands
@@ -118,9 +123,24 @@ public class Game {
     }
 
     public void userHit() {
+
+        // Ensure that the deck is populated
+        if (gamePlay.getCardPool().getDeck().isEmpty()) {
+            ui.messagePrompt.setText("Deck is empty. Reshuffling.");
+            resetDeck();
+            ui.controlButtons[0].setEnabled(false);
+            ui.controlButtons[1].setEnabled(false);
+            ui.controlButtons[2].setEnabled(true);
+            return;
+        }
         Card newCard = gamePlay.getCardPool().dealCard();
         gamePlay.getPlayerList().get(1).addCard(newCard);
         updateHandDisplay(newCard, false);
+
+        // Remove deck icon if deck is empty
+        if (gamePlay.getCardPool().getDeck().isEmpty()) {
+            ui.deckHolder.setIcon(null);
+        }
 
         int userScore = gamePlay.getPlayerList().get(1).handValue();
 
@@ -182,9 +202,21 @@ public class Game {
     }
 
     public void dealerDraw() {
+
+        //Ensure that the deck is populated
+        if (gamePlay.getCardPool().getDeck().isEmpty()) {
+            ui.messagePrompt.setText("Deck is empty. Reshuffling.");
+            resetDeck();
+            return;
+        }
         Card newCard = gamePlay.getCardPool().dealCard();
         gamePlay.getPlayerList().get(0).addCard(newCard);
         updateHandDisplay(newCard, true);
+
+        // Remove deck icon if deck is empty
+        if (gamePlay.getCardPool().getDeck().isEmpty()) {
+            ui.deckHolder.setIcon(null);
+        }
 
         int dealerTotal = gamePlay.getPlayerList().get(0).handValue();
         if (dealerTotal > 21) {
@@ -304,6 +336,13 @@ public class Game {
         }
     }
 
+    // Used when deck is empty
+    public void resetDeck() {
+       gamePlay.getCardPool().repopulateDeck();
+       ui.discardPile.setIcon(null);
+       ui.deckHolder.setIcon(ui.deck);
+    }
+
     public void endGame() {
         ui.messagePrompt.setText("Game over. Thanks for playing!");
         situation = "endingMenu";
@@ -374,7 +413,6 @@ public class Game {
             if (!(situation.equals("") || situation.equals("endingMenu"))) {
                 pauseGame();
             }
-            System.out.println("P");
         }
     }
 
