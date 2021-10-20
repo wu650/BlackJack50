@@ -59,9 +59,9 @@ public class ActionHandler implements ActionListener {
                 }
                 else if (game.getSituation().equals("userTurn")) {
                     game.userHit();
-                    game.ui.controlButtons[0].setEnabled(false);
-                    game.ui.controlButtons[1].setEnabled(false);
-                    game.ui.controlButtons[2].setEnabled(true);
+                    game.ui.controlButtons[0].setEnabled(true);
+                    game.ui.controlButtons[1].setEnabled(true);
+                    game.ui.controlButtons[2].setEnabled(false);
                 }
                 else {
                     System.out.print("Attempted to pass invalid situation");
