@@ -3,11 +3,11 @@ package com.blackjacksp.frontend;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class keyHandler implements KeyListener {
+public class KeyHandler implements KeyListener {
 
     public Game game;
 
-    public keyHandler(Game game) {
+    public KeyHandler(Game game) {
         this.game = game;
     }
 

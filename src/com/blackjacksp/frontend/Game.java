@@ -394,6 +394,7 @@ public class Game {
             }
         }
     }
+
     public void pauseGame() {
         if (!isPaused) {
             isPaused = true;
