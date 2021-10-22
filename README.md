@@ -1,5 +1,5 @@
 # blackjack-SP
-#### Video Demo: <URL Pending>
+#### Video Demo: https://youtu.be/iMzjygurgH4
 #### Description:
 This is a single player blackjack game developed entirely using Java. While there are other, better documented libraries/frameworks out there for game development, my primary motivation with this project was to learn how to code in Java, as my prior experiences were mostly in C with some Python as well. My other main goal was to gain a better understanding of OOP, a goal which this project definitely accomplished. The front end UI is implemented using the Java Swing framework, which allows for the creation of window-based applications, and is built on top of the older AWT framework.
   
