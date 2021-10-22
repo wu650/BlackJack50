@@ -31,9 +31,14 @@ This is a single player blackjack game developed entirely using Java. While ther
   - updateHandDisplay/updateDiscardPile: These methods take in card data from the backend and use it to update the appropiate fields in the ui with associated card image files.
   - resetDeck: Called within draw-related methods when a draw is attempted with inadequate cards. Uses repopulateDeck from backend and updates deck and discard pile icons.
   - setupNewGame: Called from the pause menu (discussed later). Resets all backend and UI states necessary for a game and returns the user to the setupUI to create a fresh game.
-  - resumeGame: Called from the pause menu. Activates buttons that were set inactive by the pause menu.
-  - 
+  - resumeGame: Called from the pause menu. Activates buttons that were set inactive by the pause menu. This is achieved through the use of an ArrayList that contains the buttons that were active when the game was paused. This ArrayList of buttons is update during each pause with the updateActiveButtons method.
+  - pauseGame: Sets visible the pause UI and makes the text invisible in the JTextfield to avoid interference. Also disables all control buttons.
+  
   Also of note - Game presents users with specific prompts depending on the gamestate and situation in the uiMessagePrompt JTextField in the display panel. All methods that involve drawing remove the deck icon if they draw the last card. Most methods will update to a different "situation". Game also has 2 int fields - userCardsDisplayed and dealerCardsDisplayed that work with the updateHandDisplay function to make sure the new card is added to the first open spot. These totals are not updated for hidden cards, ensuring that those cards can still be flipped. The res file in the backend holds images for all 52 cards stored in this format (valuesuits.png). This file format matches the format of the filename field within the Card class, allowing for easy image retrieval when cards are to be loaded. 
+  # Actionlistener and KeyBinding:
+  The game is driven by an Actionlistener (actionHandler), to which all buttons are tied. The action listener takes the button input and runs a switch case depending on what is passed. The "continue" button has numerous uses, so its switch case makes use of an if else statement that checks the game "situation" at the time that continue is pressed, allowing the proper method to be called. 
+  
+  Implementing the pause menu was difficult, as I was determined to have it be a keybind instead of a button. First I tried with a KeyListener, but the issue was that the object the key listener was tied to had to be the object in focus for the pause menu to be active. I then learned how to use KeyBindings, and found that you could speciy different scopes of focus under which the botton can be active. The one that stood out was an option to keep the the KeyBinding active as long as an object within the object is in focus. To accomplish this, I created an overarching JPanel (gamePanel) in the ui and put all the individual main game. By putting all the main game objects inside of it and binding it to the p key, a pause option is available no matter the gamestate.
 
   
   
